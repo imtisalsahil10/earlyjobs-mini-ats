@@ -1,9 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  cacheComponents: true,
-  partialPrefetching: true,
+  // Every page reads live pipeline data, so component-level caching is off
+  // in favour of per-page dynamic rendering.
   turbopack: {
     rules: {
       "*.css": {

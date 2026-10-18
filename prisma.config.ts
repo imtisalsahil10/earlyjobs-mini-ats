@@ -1,0 +1,15 @@
+import path from "node:path";
+import "dotenv/config";
+import { defineConfig } from "prisma/config";
+
+export default defineConfig({
+  schema: path.join("prisma", "schema.prisma"),
+  migrations: {
+    path: path.join("prisma", "migrations"),
+    seed: "npx tsx prisma/seed.ts",
+  },
+  datasource: {
+    // Falls back so `prisma generate` still works on a fresh clone with no .env.
+    url: process.env.DATABASE_URL ?? "file:dev.db",
+  },
+});

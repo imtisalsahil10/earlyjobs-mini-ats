@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+/// A requisition candidates apply to.
+model Job {
+  id         String   @id @default(cuid())
+  title      String
+  department String
+  location   String
+  employment String   @default("Full-time")
+  status     String   @default("OPEN")
+  minSalary  Int?
+  maxSalary  Int?
+  description String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  candidates Candidate[]
+
+  @@index([status])
+}
+
+model Candidate {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  location  String?
+  title     String?
+  /// Comma-separated for SQLite; exposed as string[] through the data layer.
+  skills    String   @default("")
+  source    String   @default("Careers Page")
+  stage     String   @default("APPLIED")
+  rating    Int      @default(0)
+  avatarSeed String?
+  resumeUrl String?
+  linkedinUrl String?
+  appliedAt DateTime @default(now())
+  /// Set when the candidate first enters HIRED or REJECTED.
+  closedAt  DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  jobId String
+  job   Job    @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  events StageEvent[]
+  notes  Note[]
+
+  @@unique([email, jobId])
+  @@index([stage])
+  @@index([jobId])
+  @@index([name])
+}
+
+/// Immutable audit trail of pipeline movement; powers velocity metrics.
+model StageEvent {
+  id        String   @id @default(cuid())
+  fromStage String?
+  toStage   String
+  createdAt DateTime @default(now())
+
+  candidateId String
+  candidate   Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+
+  @@index([candidateId])
+  @@index([toStage])
+}
+
+model Note {
+  id        String   @id @default(cuid())
+  body      String
+  author    String   @default("Recruiter")
+  createdAt DateTime @default(now())
+
+  candidateId String
+  candidate   Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+
+  @@index([candidateId])
+}
