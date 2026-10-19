@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { BarChart3, Briefcase, Columns3, Menu, Users, X } from "lucide-react";
+import { CURRENT_USER } from "@/lib/current-user";
 import { cn } from "@/lib/utils";
 
 const LINKS = [
@@ -69,8 +70,8 @@ export function Sidebar() {
         <NavLinks />
       </div>
       <div className="border-t border-slate-100 px-5 py-4">
-        <p className="text-xs font-medium text-slate-900">Priya Nair</p>
-        <p className="text-xs text-slate-500">Talent Acquisition</p>
+        <p className="text-xs font-medium text-slate-900">{CURRENT_USER.name}</p>
+        <p className="text-xs text-slate-500">{CURRENT_USER.role}</p>
       </div>
     </aside>
   );

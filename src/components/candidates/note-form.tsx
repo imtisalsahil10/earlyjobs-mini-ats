@@ -4,6 +4,7 @@ import { useActionState, useEffect, useRef } from "react";
 import { useFormStatus } from "react-dom";
 import { addNote, type ActionState } from "@/app/actions";
 import { Button, Textarea } from "@/components/ui";
+import { CURRENT_USER } from "@/lib/current-user";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -27,7 +28,7 @@ export function NoteForm({ candidateId }: { candidateId: string }) {
   return (
     <form ref={formRef} action={formAction} className="space-y-2">
       <input type="hidden" name="candidateId" value={candidateId} />
-      <input type="hidden" name="author" value="Priya Nair" />
+      <input type="hidden" name="author" value={CURRENT_USER.name} />
       <Textarea
         name="body"
         rows={3}

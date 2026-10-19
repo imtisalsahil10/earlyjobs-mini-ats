@@ -2,6 +2,7 @@ import "dotenv/config";
 import path from "node:path";
 import { PrismaClient } from "../src/generated/prisma/client";
 import { PrismaLibSql } from "@prisma/adapter-libsql";
+import { CURRENT_USER } from "../src/lib/current-user";
 
 const rawUrl = process.env.TURSO_DATABASE_URL ?? process.env.DATABASE_URL ?? "file:dev.db";
 const adapter = new PrismaLibSql({
@@ -333,7 +334,7 @@ async function main() {
       await prisma.note.create({
         data: {
           body,
-          author: pick(["Priya Nair", "Imtisal Sahil", "Rohan Verma"]),
+          author: pick([CURRENT_USER.name, "Ananya Rao", "Rohan Verma"]),
           candidateId: candidate.id,
           createdAt: daysAgo(randomInt(1, Math.max(2, appliedDaysAgo))),
         },
