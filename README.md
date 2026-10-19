@@ -7,6 +7,8 @@ which is what makes the velocity and conversion metrics trustworthy.
 
 Built with Next.js 16 (App Router), TypeScript, Prisma, and SQLite.
 
+**Live demo:** https://earlyjobs-mini-ats-blond.vercel.app
+
 ## Features
 
 **Dashboard** — Active candidates, 30-day application and hire counts with
@@ -96,14 +98,21 @@ Set these environment variables on the host:
 | Variable | Value |
 | --- | --- |
 | `TURSO_DATABASE_URL` | `libsql://<your-db>.turso.io` |
-| `TURSO_AUTH_TOKEN` | Token from `turso db tokens create` |
-| `DATABASE_URL` | Same libSQL URL, used by `prisma migrate deploy` |
+| `TURSO_AUTH_TOKEN` | Token from `turso db tokens create <db>` |
+| `DATABASE_URL` | Same libSQL URL, so the Prisma CLI loads during build |
 
-Then apply migrations and seed the remote database once:
+To provision the remote database:
 
 ```bash
-npm run db:deploy
-npm run db:seed
+turso db create earlyjobs-ats
+
+# Prisma's schema engine doesn't accept libsql:// URLs, so apply the generated
+# migration SQL through the Turso shell instead of `prisma migrate deploy`.
+cat prisma/migrations/*/migration.sql | turso db shell earlyjobs-ats
+
+# The seed talks to the database through the libSQL adapter, so it runs
+# unchanged against Turso once these two variables are exported.
+TURSO_DATABASE_URL=... TURSO_AUTH_TOKEN=... npm run db:seed
 ```
 
 ## Project structure
