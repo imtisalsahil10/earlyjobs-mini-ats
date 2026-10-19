@@ -9,6 +9,16 @@ Built with Next.js 16 (App Router), TypeScript, Prisma, and SQLite.
 
 **Live demo:** https://earlyjobs-mini-ats-blond.vercel.app
 
+## Demo
+
+A 1:44 walkthrough of the dashboard, search, candidate timeline, and a drag
+between pipeline stages — recorded against the deployed app.
+
+[![Watch the demo](docs/demo-poster.jpg)](docs/demo.mp4)
+
+[`docs/demo.mp4`](docs/demo.mp4) · [`DEMO_SCRIPT.md`](DEMO_SCRIPT.md) is the
+shot list it follows.
+
 ## Features
 
 **Dashboard** — Active candidates, 30-day application and hire counts with
